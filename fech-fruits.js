@@ -13,7 +13,7 @@ const getFruit = (fruit) => {
     }
 } 
 const fetchFruit = (param)=>{
-    return Promise.resolve(param)
+    return Promise.resolve(getFruit(param))
 }
 module.exports = {
     fetchFruit

@@ -20,7 +20,9 @@ app.get('/fruit',(req,res) => {
         .then(result => res.send(result)) 
         .catch(err => console.log('err'))
 })
-app.get('/fruit/:id',(req,res) => {
+app.get('/flights/:from-:to',(req,res) => {
     res.send(req.params)
 })
-
+app.all('/*',(req,res) => {
+    res.send('you shouldnt be here')
+})
