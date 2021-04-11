@@ -1,4 +1,4 @@
-const {fetchFruit} = require('./fech-fruits')
+const { fetchFruit } = require('./fetch-fruits')
 
 
 const express = require('express')
@@ -18,11 +18,26 @@ app.get('/os',(req,res) => {
 app.get('/fruit',(req,res) => {
     fetchFruit('banana')
         .then(result => res.send(result)) 
-        .catch(err => console.log('err'))
+        .catch(err => res.send(`😭${err}`))
 })
-app.get('/flights/:from-:to',(req,res) => {
-    res.send(req.params)
+app.get('/fruit/:fruitName-:time',(req,res) => {
+    const {fruitName,time} = req.params
+    // res.send(`fruit is ${fruitName} time is ${time}`)
+    console.log(`--------------1`)
+    fetchFruit(fruitName,time)
+        .then(fruit => res.send(fruit))
+        .then(console.log('--------------2'))
+        .catch(err => res.send(`😭${err}`))
+        console.log(`--------------4`)
 })
 app.all('/*',(req,res) => {
     res.send('you shouldnt be here')
 })
+
+// TODO: move to 'fetch-fruits' module
+const makeDrink = async() => { 
+    await fetchFruit('lemon',2000).then(res => console.log(res))
+    fetchFruit('banana',0).then(res => console.log(res)) 
+}
+
+makeDrink()

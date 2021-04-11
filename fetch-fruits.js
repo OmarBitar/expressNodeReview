@@ -1,5 +1,6 @@
-const getFruit = (fruit) => {
-    switch(fruit) {
+const fetchFruit = async(name,timeout) => {
+    await new Promise(resolve => setTimeout(resolve, timeout)); //delay
+    switch(name) {
         case 'peach':
             return '🍑'
         case 'lemon':
@@ -9,12 +10,11 @@ const getFruit = (fruit) => {
         case 'banana':
             return '🍌'
         default:
-            return 'dont got what ur looking for'
+            return Promise.reject(new Error('dont got what u looking for'))
     }
-} 
-const fetchFruit = (param)=>{
-    return Promise.resolve(getFruit(param))
+  
 }
+
 module.exports = {
     fetchFruit
 }
