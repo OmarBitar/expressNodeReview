@@ -1,6 +1,5 @@
 const { fetchFruit } = require('./fetch-fruits')
 
-
 const express = require('express')
 const app = express() 
 app.use(express.json())
@@ -15,23 +14,38 @@ app.get('/',(req,res) => {
 app.get('/os',(req,res) => {
     res.send(`node.js running on ${process.platform}`)
 })
-app.get('/fruit',(req,res) => {
-    fetchFruit('banana')
-        .then(result => res.send(result)) 
-        .catch(err => res.send(`😭${err}`))
-})
 app.get('/fruit/:fruitName-:time([0-9]+)',async(req,res) => {
     const {fruitName,time} = req.params 
     console.log(`fetching ${fruitName}`)
+    
     await fetchFruit(fruitName,time)
         .then(fruit => res.send(fruit)) 
         .catch(err => res.send(`😭${err}`)) 
-    console.log(`fetch complete`)
+    console.log(`fetch complete`)  
+})
+app.get('/fruit/:fruitName',(req,res) => {
+    const {fruitName } = req.params  
+    fetchFruit(fruitName)
+        .then(result => res.send(result)) 
+        .catch(err => res.send(`😭${err}`))
+})
+app.get('/drink/:fruitA.:fruitB/:time?',async(req,res) => {
+    const { fruitA, fruitB } = req.params 
+    const { time } = req.query 
+    const a = fetchFruit(fruitA ,3000)
+    const b = fetchFruit(fruitB,0) 
+    if (time < 2000) {
+        Promise.race([a,b]).then(drink => res.send(drink))
+        .catch(err => res.send(`😭${err}`)) 
+    } else {
+        Promise.all([a,b]).then(drink => res.send(drink))
+        .catch(err => res.send(`😭${err}`)) 
+    }  
     
 })
-// app.all('/*',(req,res) => {
-//     res.send('you shouldnt be here')
-// })
+app.all('/*',(req,res) => {
+    res.send('you shouldnt be here')
+})
 
 // TODO: move to 'fetch-fruits' module
 const makeDrink = async() => { 
