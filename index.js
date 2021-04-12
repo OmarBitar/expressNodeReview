@@ -20,19 +20,18 @@ app.get('/fruit',(req,res) => {
         .then(result => res.send(result)) 
         .catch(err => res.send(`😭${err}`))
 })
-app.get('/fruit/:fruitName-:time',(req,res) => {
-    const {fruitName,time} = req.params
-    // res.send(`fruit is ${fruitName} time is ${time}`)
-    console.log(`--------------1`)
-    fetchFruit(fruitName,time)
-        .then(fruit => res.send(fruit))
-        .then(console.log('--------------2'))
-        .catch(err => res.send(`😭${err}`))
-        console.log(`--------------4`)
+app.get('/fruit/:fruitName-:time([0-9]+)',async(req,res) => {
+    const {fruitName,time} = req.params 
+    console.log(`fetching ${fruitName}`)
+    await fetchFruit(fruitName,time)
+        .then(fruit => res.send(fruit)) 
+        .catch(err => res.send(`😭${err}`)) 
+    console.log(`fetch complete`)
+    
 })
-app.all('/*',(req,res) => {
-    res.send('you shouldnt be here')
-})
+// app.all('/*',(req,res) => {
+//     res.send('you shouldnt be here')
+// })
 
 // TODO: move to 'fetch-fruits' module
 const makeDrink = async() => { 
@@ -40,4 +39,5 @@ const makeDrink = async() => {
     fetchFruit('banana',0).then(res => console.log(res)) 
 }
 
-makeDrink()
+// makeDrink() 
+
