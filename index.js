@@ -32,7 +32,7 @@ app.get('/fruit/:fruitName',(req,res) => {
 app.get('/drink/:fruitA.:fruitB/:time?',async(req,res) => {
     const { fruitA, fruitB } = req.params 
     const { time } = req.query 
-    const a = fetchFruit(fruitA ,3000)
+    const a = fetchFruit(fruitA ,time)
     const b = fetchFruit(fruitB,0) 
     if (time < 2000) {
         Promise.race([a,b]).then(drink => res.send(drink))
@@ -41,17 +41,9 @@ app.get('/drink/:fruitA.:fruitB/:time?',async(req,res) => {
         Promise.all([a,b]).then(drink => res.send(drink))
         .catch(err => res.send(`😭${err}`)) 
     }  
-    
 })
 app.all('/*',(req,res) => {
     res.send('you shouldnt be here')
 })
 
-// TODO: move to 'fetch-fruits' module
-const makeDrink = async() => { 
-    await fetchFruit('lemon',2000).then(res => console.log(res))
-    fetchFruit('banana',0).then(res => console.log(res)) 
-}
-
-// makeDrink() 
 
