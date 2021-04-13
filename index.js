@@ -42,8 +42,13 @@ app.get('/drink/:fruitA.:fruitB/:time?',async(req,res) => {
         .catch(err => res.send(`😭${err}`)) 
     }  
 })
+app.post('/fruit', (req,res) => {  
+    for (const key in req.body) {
+        console.log(`${key}:${req.body[key]}`);
+    }
+    res.send('test res')
+})
+// TODO: add auth
 app.all('/*',(req,res) => {
     res.send('you shouldnt be here')
 })
-
-
